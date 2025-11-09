@@ -4,10 +4,15 @@ typedef enum{
 } op_type;
 
 typedef enum {
-  UVM_PASSIVE = 0,
-  UVM_ACTIVE  = 1,
-  __NOTSET   = 2
+  PASSIVE = 0,
+  ACTIVE  = 1
 } active_type;
+
+typedef enum {
+  MASTER    = 0,
+  SLAVE     = 1,
+  __NOTSET  = 2
+} driver_type;
 
 typedef enum {
   OKAY  = 0,
