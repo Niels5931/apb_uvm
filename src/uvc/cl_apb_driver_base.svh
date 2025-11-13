@@ -27,15 +27,15 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item);
   endtask : run_phase
 
   task handle_reset();
-    if (this.apb_if.PRESETn === 0) begin
+    if (this.vif.PRESETn === 0) begin
       if (main_loop_h != null) begin
         main_loop_h.kill();
         this.seq_item_port.item_done();
       end
       drive_reset();
       do begin
-        @(posedge this.apb_if.PCLK);
-      end while (this.apb_if.PRESETn === 0);
+        @(posedge this.vif.PCLK);
+      end while (this.vif.PRESETn === 0);
     end
   endtask : handle_reset
 

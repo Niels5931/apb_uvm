@@ -26,7 +26,7 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
   virtual task drive_pins();
     // RD/WR
     if (this.req.op === pk_apb::WR) begin
-      this.vif.PRWITE <= 1'b1;
+      this.vif.PWRITE <= 1'b1;
     end else if (this.req.op == pk_apb::RD) begin
       this.vif.PWRITE <= 1'b0;
     end
@@ -38,7 +38,7 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
     do begin
       @(posedge this.vif.PCLK);
     end while (this.vif.PREADY === 1'b0);
-    this.rsp.resp = this.vif.PSLVERR;
+    this.rsp.resp = resp_type'(this.vif.PSLVERR);
   endtask : drive_pins
 
 endclass : cl_apb_driver_manager

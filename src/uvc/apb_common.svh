@@ -5,7 +5,8 @@ typedef enum{
 
 typedef enum {
   PASSIVE = 0,
-  ACTIVE  = 1
+  ACTIVE  = 1,
+  __NOTDRIVEN = 2
 } active_type;
 
 typedef enum {

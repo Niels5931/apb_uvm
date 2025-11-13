@@ -33,7 +33,7 @@ class cl_apb_agent extends uvm_agent;
   function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     if (this.cfg.active == pk_apb::ACTIVE) begin
-      this.driver.seq_item.port.connect(this.sequencer.seq_item_export);
+      this.driver.seq_item_port.connect(this.sequencer.seq_item_export);
     end
   endfunction : connect_phase
 
