@@ -1,0 +1,11 @@
++incdir+/home/niels/projects/uvm/common/uvm-verilator/src
++incdir+./src/uvc
++incdir+./src/tb
++incdir+./src/tb/vseqs
++incdir+./src/tb/tests
+src/uvc/pk_apb.sv
+src/tb/pk_apb_tb.sv
+src/tb/tests/pk_apb_tests.sv
+src/tb/vseqs/pk_apb_vseqs.sv
+src/if/if_apb.sv
+src/if/if_clk.sv

@@ -13,20 +13,15 @@ class cl_apb_agent extends uvm_agent;
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
-    if(!uvm_config_db#(cl_apb_config)::get(this,"","cfg",cfg)) begin
-      `uvm_fatal("APB Agent", "Error! No config parsed to agent")
+    if (this.cfg.driver == pk_apb::MASTER) begin
+      this.driver = cl_apb_driver_manager::type_id::create("mgmt driver",this);
+    end else if (this.cfg.driver == pk_apb::SLAVE) begin
+      `uvm_fatal("APB Agent", "Error! Slave driver not implemnted yet")
+    end else begin
+      `uvm_fatal("APB Agent", "Error! Please choose a driver type for agent")
     end
 
-    if (this.cfg.active == pk_apb::ACTIVE) begin
-      this.sequencer = uvm_sequencer#(cl_apb_seq_item)::type_id::create("sequencer",this);
-      if (this.cfg.driver == pk_apb::MASTER) begin
-        this.driver = cl_apb_driver_manager::type_id::create("mgmt driver",this);
-      end else if (this.cfg.driver == pk_apb::SLAVE) begin
-        `uvm_fatal("APB Agent", "Error! Slave driver not implemnted yet")
-      end else begin
-        `uvm_fatal("APB Agent", "Error! Please choose a driver type for agent")
-      end
-    end
+    this.sequencer = uvm_sequencer#(cl_apb_seq_item)::type_id::create();
 
   endfunction : build_phase
 

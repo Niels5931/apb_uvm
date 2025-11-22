@@ -1,5 +1,5 @@
 
-class cl_apb_base_seq extends uvm_sequence#(cl_apb_seq_item);
+class cl_apb_base_seq extends uvm_sequence#(.REQ(cl_apb_seq_item),.RSP(cl_apb_seq_item));
 
   cl_apb_seq_item s_item;
 
@@ -8,7 +8,7 @@ class cl_apb_base_seq extends uvm_sequence#(cl_apb_seq_item);
 
   function new(string name = "cl_apb_base_seq");
     super.new(name);
-  endfunction 
+  endfunction
 
   virtual task body();
     `uvm_fatal("cl_apb_base_seq","Seq must override task body")
@@ -17,7 +17,7 @@ class cl_apb_base_seq extends uvm_sequence#(cl_apb_seq_item);
 endclass : cl_apb_base_seq
 
 class cl_apb_single_seq extends cl_apb_base_seq;
-  
+
   `uvm_object_utils(cl_apb_single_seq)
 
   function new(string name = "cl_apb_single_seq");

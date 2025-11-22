@@ -15,7 +15,7 @@ TEST_FILES = $(wildcard $(TEST_DIR)/*.sv)
 
 TOP_NAME := test
 BIN_NAME := test
-UVM_TEST ?= cl_uvm_simple_test
+UVM_TEST ?= cl_apb_tb_simple_test
 UVM_FILES := -I$(UVM_ROOT)/src $(UVM_ROOT)/src/uvm_pkg.sv
 INC_DIRS = -I$(PWD)/$(IF_DIR) -I$(PWD)/$(TEST_DIR) -I$(PWD)/$(UVC_DIR)
 DEFINES := -DUVM_NO_DPI
@@ -26,10 +26,9 @@ clean:
 	rm -rf verilator_build_dir
 
 build-verilator: 
-		$(VERILATOR) --binary $(UVM_FILES) $(INC_DIRS) $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) \
-		+incdir+$(PWD)/test --bbox-unsup \
-		--verilate-jobs 4 --build-jobs 4 -Mdir $(BUILD_DIR) --top-module tb_top \
-		$(UVC_DIR)/pk_apb.sv $(TEST_FILES) $(RTL_FILES) $(IF_DIR)/if_apb.sv 
+		$(VERILATOR) --binary $(UVM_FILES) -f verilator.f $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) --bbox-unsup  \
+		--verilate-jobs 4 --build-jobs 4 -Mdir $(BUILD_DIR) --top-module tb_top src/tb/tb_top.sv \
+		$(TEST_FILES) $(RTL_FILES) $(IF_DIR)/if_apb.sv 
 
 simulate: $(SIM_DIR)/$(BIN_NAME)
 	$(SIM_DIR)/$(BIN_NAME) +UVM_TESTNAME=$(UVM_TEST) | tee $(TEMPFILE)

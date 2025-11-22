@@ -9,10 +9,12 @@ module tb_top;
   initial begin
     #12 PRESETn = 0;
   end
-
-  if_apb apb_if(.PCLK(PCLK),.PRESETn(PRESETn));
+  
+  if_clk clk_if(PCLK,PRESETn);
+  if_apb apb_if(clk_if.PCLK,.PRESETn(clk_if.PRESETn));
 
   initial begin
+    uvm_config_db#(virtual if_clk)::set(uvm_root::get(),"*","clk_if",clk_if);
     uvm_config_db#(virtual if_apb.master)::set(uvm_root::get(),"*","vif",apb_if.master);
     uvm_config_db#(virtual if_apb.slave)::set(uvm_root::get(),"*","vif",apb_if.slave);
   end
