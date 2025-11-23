@@ -6,7 +6,7 @@ class cl_apb_seq_item extends uvm_sequence_item;
   rand resp_type  resp;
   rand op_type    op; // RD or WR
   rand int        delay; // delay clock cycles before slave accepting request
-    
+
   `uvm_object_utils_begin(cl_apb_seq_item)
     `uvm_field_int(data,            UVM_DEFAULT)
     `uvm_field_int(addr,            UVM_DEFAULT)
@@ -14,13 +14,13 @@ class cl_apb_seq_item extends uvm_sequence_item;
     `uvm_field_enum(op_type,op,     UVM_DEFAULT)
     `uvm_field_int(delay,           UVM_DEFAULT)
   `uvm_object_utils_end
- 
+
   function new(string name = "cl_apb_seq_item");
     super.new(name);
   endfunction
 
   constraint c_seq_item_delay {
-    delay < 10;  
+    delay < 10;
   };
 
 endclass : cl_apb_seq_item

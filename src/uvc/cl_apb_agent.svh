@@ -13,9 +13,13 @@ class cl_apb_agent extends uvm_agent;
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
 
+    if(!uvm_config_db#(cl_apb_config)::get(this,"","cfg",this.cfg)) begin
+      `uvm_fatal("APB Agent", "Could not find config object")
+    end
+
     if (this.cfg.driver == pk_apb::MASTER) begin
-      this.driver = cl_apb_driver_manager::type_id::create("mgmt driver",this);
-      this.sequencer = uvm_sequencer#(cl_apb_seq_item)::type_id::create("apb mgmt sequencer",this);
+      this.driver = cl_apb_driver_manager::type_id::create("mgmt_driver",this);
+      this.sequencer = uvm_sequencer#(cl_apb_seq_item)::type_id::create("apb_mgmt_sequencer",this);
     end else if (this.cfg.driver == pk_apb::SLAVE) begin
       `uvm_fatal("APB Agent", "Error! Slave driver not implemnted yet")
     end else begin

@@ -1,6 +1,6 @@
-import uvm_pkg::*;
-
 module tb_top;
+
+  import uvm_pkg::*;
 
   logic PCLK = 0;
   logic PRESETn = 1;
@@ -20,6 +20,6 @@ module tb_top;
   end
 
   initial begin
-    run_test();
+    run_test("cl_apb_tb_simple_test");
   end
 endmodule

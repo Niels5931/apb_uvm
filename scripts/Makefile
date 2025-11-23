@@ -4,6 +4,8 @@ BUILD_DIR = verilator_build_dir
 VERILATOR := verilator
 UVM_ROOT = /home/niels/projects/uvm/common/uvm-2017-install/uvm-verilator-2017-1.0/
 
+VERILATOR_JOBS ?= 4
+
 SRC_DIR = src
 UVC_DIR = $(SRC_DIR)/uvc
 RTL_DIR = $(SRC_DIR)/rtl
@@ -29,7 +31,7 @@ clean:
 
 verilator_build_dir: 
 		$(VERILATOR) --binary $(UVM_FILES) -f verilator.f $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) --bbox-unsup  \
-		--verilate-jobs 4 --build-jobs 4 -Mdir $(BUILD_DIR) --top-module tb_top src/tb/tb_top.sv \
+		--verilate-jobs $(VERILATOR_JOBS) --build-jobs $(VERILATOR_JOBS) -Mdir $(BUILD_DIR) --top-module tb_top src/tb/tb_top.sv \
 		$(TEST_FILES) $(RTL_FILES)
 
 run-test: verilator_build_dir

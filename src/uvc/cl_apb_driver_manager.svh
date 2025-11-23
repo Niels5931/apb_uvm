@@ -13,7 +13,7 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
     end
   endfunction : build_phase
 
-  virtual task drive_reset();
+  virtual function void drive_reset();
     this.vif.PSEL <= '0;
     this.vif.PENABLE <= '0;
     this.vif.PADDR <= '0;
@@ -21,7 +21,7 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
     this.vif.PWDATA <= '0;
     this.vif.PSTRB <= '0;
     this.vif.PPROT <= '0;
-  endtask : drive_reset
+  endfunction : drive_reset
 
   virtual task drive_pins();
     // RD/WR
