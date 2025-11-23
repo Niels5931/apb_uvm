@@ -22,13 +22,18 @@ DEFINES := -DUVM_NO_DPI
 WARNINGS = -Wno-lint -Wno-TIMESCALEMOD -Wno-SYMRSVDWORD -Wno-CONSTRAINTIGN
 OTHER_FLAGS := --bbox-sys --timescale-override 1ns/1ps --assert
 
+.default: run-test
+
 clean:
 	rm -rf verilator_build_dir
 
-build-verilator: 
+verilator_build_dir: 
 		$(VERILATOR) --binary $(UVM_FILES) -f verilator.f $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) --bbox-unsup  \
 		--verilate-jobs 4 --build-jobs 4 -Mdir $(BUILD_DIR) --top-module tb_top src/tb/tb_top.sv \
-		$(TEST_FILES) $(RTL_FILES) $(IF_DIR)/if_apb.sv 
+		$(TEST_FILES) $(RTL_FILES)
+
+run-test: verilator_build_dir
+	./verilator_build_dir/Vtb_top +UVM_TESTNAME=$(UVM_TEST)
 
 simulate: $(SIM_DIR)/$(BIN_NAME)
 	$(SIM_DIR)/$(BIN_NAME) +UVM_TESTNAME=$(UVM_TEST) | tee $(TEMPFILE)

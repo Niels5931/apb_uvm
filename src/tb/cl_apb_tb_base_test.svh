@@ -2,18 +2,22 @@ class cl_apb_tb_base_test extends uvm_test;
 
   cl_apb_tb_env     env;
   cl_apb_tb_config  cfg;
+  cl_apb_tb_base_vseq  seq;
 
-  `uvm_component_utils(cl_apb_base_test)
+  `uvm_component_utils(cl_apb_tb_base_test)
 
-  function new (string name, uvm_component parent);
-    super.new(name, parent);
+  function new (string name,uvm_component parent);
+    super.new(name,parent);
   endfunction : new
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     env = cl_apb_tb_env::type_id::create("env", this);
     cfg = cl_apb_tb_config::type_id::create("cfg");
-    uvm_config_db#(cl_apb_config)::set(this, "*", "test_cfg", cfg);
+    if (!uvm_config_db#(virtual if_clk)::get(this,"","clk_if",this.cfg.clk_if)) begin
+      `uvm_fatal("cl_apb_tb_base_test","Error! Couldnt get clk if")
+    end
+    uvm_config_db#(cl_apb_tb_config)::set(this, "*", "test_cfg", cfg);
   endfunction : build_phase
 
   task reset_phase(uvm_phase phase);
@@ -25,7 +29,7 @@ class cl_apb_tb_base_test extends uvm_test;
   endtask : reset_phase
 
   task main_phase(uvm_phase phase);
-    seq = cl_apb_tb_base_vseq::type_id::create("seq");
+    seq = cl_apb_tb_base_vseq::type_id::create("seq",this);
     phase.raise_objection(this);
     seq.start(env.sequencer);
     phase.drop_objection(this);

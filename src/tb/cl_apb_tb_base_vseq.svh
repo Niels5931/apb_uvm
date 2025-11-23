@@ -1,9 +1,11 @@
 class cl_apb_tb_base_vseq extends uvm_sequence;
 
-  `uvm_component_utils(cl_apb_tb_base_vseq)
+  `uvm_declare_p_sequencer(pk_apb_tb::cl_apb_tb_vseqr)
 
-  function new(string name = "cl_apb_tb_base_vseq",uvm_component parent);
-    super.new(name,parent);
+  `uvm_object_utils(cl_apb_tb_base_vseq)
+
+  function new(string name = "cl_apb_tb_base_vseq");
+    super.new(name);
   endfunction
 
   virtual task body();
