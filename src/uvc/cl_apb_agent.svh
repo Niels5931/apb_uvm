@@ -26,7 +26,6 @@ class cl_apb_agent extends uvm_agent;
       `uvm_fatal("APB Agent", "Error! Please choose a driver type for agent")
     end
 
-
   endfunction : build_phase
 
   function void connect_phase(uvm_phase phase);

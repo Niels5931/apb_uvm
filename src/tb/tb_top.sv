@@ -1,6 +1,8 @@
 module tb_top;
 
   import uvm_pkg::*;
+  import pk_apb_tests::*;
+
   `include "uvm_macros.svh"
   logic PCLK = 0;
 
