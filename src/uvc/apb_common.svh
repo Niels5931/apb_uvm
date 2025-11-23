@@ -1,4 +1,4 @@
-typedef enum{
+typedef enum bit {
   RD = 1'b0,
   WR = 1'b1
 } op_type;
@@ -15,7 +15,7 @@ typedef enum {
   __NOTSET  = 2
 } driver_type;
 
-typedef enum {
+typedef enum bit {
   OKAY  = 0,
   ERROR = 1
 } resp_type;

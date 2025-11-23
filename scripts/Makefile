@@ -2,7 +2,7 @@
 BUILD_DIR = verilator_build_dir
 
 VERILATOR := verilator
-UVM_ROOT = /home/niels/projects/uvm/common/uvm-2017-install/uvm-verilator-2017-1.0/
+UVM_ROOT = /home/niels/uvm/uvm-verilator-uvm-2017-1.0
 
 VERILATOR_JOBS ?= 4
 
@@ -11,6 +11,8 @@ UVC_DIR = $(SRC_DIR)/uvc
 RTL_DIR = $(SRC_DIR)/rtl
 IF_DIR = $(SRC_DIR)/if
 TEST_DIR = test
+
+SEED ?= $(shell date +%s)
 
 RTL_FILES = $(wildcard $(SRC_DIR)/rtl/*.sv)
 TEST_FILES = $(wildcard $(TEST_DIR)/*.sv)
@@ -32,10 +34,10 @@ clean:
 verilator_build_dir: 
 		$(VERILATOR) --binary $(UVM_FILES) -f verilator.f $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) --bbox-unsup  \
 		--verilate-jobs $(VERILATOR_JOBS) --build-jobs $(VERILATOR_JOBS) -Mdir $(BUILD_DIR) --top-module tb_top src/tb/tb_top.sv \
-		$(TEST_FILES) $(RTL_FILES)
+		$(RTL_FILES) -CFLAGS -O0
 
 run-test: verilator_build_dir
-	./verilator_build_dir/Vtb_top +UVM_TESTNAME=$(UVM_TEST)
+	./verilator_build_dir/Vtb_top +UVM_TESTNAME=$(UVM_TEST) +verilator+seed+$(SEED)
 
 simulate: $(SIM_DIR)/$(BIN_NAME)
 	$(SIM_DIR)/$(BIN_NAME) +UVM_TESTNAME=$(UVM_TEST) | tee $(TEMPFILE)

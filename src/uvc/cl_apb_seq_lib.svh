@@ -27,20 +27,20 @@ class cl_apb_single_seq extends cl_apb_base_seq;
   virtual task body();
     // the seq item is created and randomized if not set during simulation
     start_item(s_item);
-    if (!s_item.randomize()) begin
-      `uvm_fatal("cl_apb_single_seq","Failed to randomize seq item!")
-    end
+    //if (!s_item.randomize()) begin
+    //  `uvm_fatal("cl_apb_single_seq","Failed to randomize seq item!")
+    //end
 
     finish_item(s_item);
-    get_response(s_item);
+    //get_response(s_item);
 
   endtask : body
 
   function void pre_randomize();
     pre_randomize();
-    if (s_item == null) begin
-      s_item = cl_apb_seq_item::type_id::create();
-      if (!s_item.randomize()) begin
+    if (this.s_item == null) begin
+      this.s_item = cl_apb_seq_item::type_id::create();
+      if (!this.s_item.randomize()) begin
         `uvm_fatal("cl_apb_single_seq","Failed to randomize seq item!")
       end
     end

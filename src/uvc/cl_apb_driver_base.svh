@@ -21,7 +21,7 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item);
       begin
         start_loop();
       end
-    join_none
+    join
   endtask : main_phase
 
   task handle_reset();
@@ -31,6 +31,7 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item);
         this.seq_item_port.item_done();
       end
       drive_reset();
+      //`uvm_fatal("DRIVE","WAITING FOR RST")
       wait(this.vif.PRESETn === 1);
     end
     @(posedge this.vif.PCLK);
@@ -48,9 +49,9 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item);
     forever begin
       this.seq_item_port.get_next_item(this.req);
       $cast(this.rsp,this.req.clone());
-      drive_pins();
-      this.seq_item_port.put_response(this.rsp);
-      this.seq_item_port.item_done();
+      this.drive_pins();
+      //this.seq_item_port.put_response(this.rsp);
+      this.seq_item_port.item_done(this.req);
     end
   endtask : main_loop
 

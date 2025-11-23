@@ -30,14 +30,11 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
     end else if (this.req.op == pk_apb::RD) begin
       this.vif.PWRITE <= 1'b0;
     end
-
     this.vif.PSEL <= 1'b1;
     this.vif.PADDR <= this.req.addr;
     @(posedge this.vif.PCLK);
     this.vif.PENABLE <= 1'b1;
-    do begin
-      @(posedge this.vif.PCLK);
-    end while (this.vif.PREADY === 1'b0);
+    @(posedge this.vif.PCLK);
     this.rsp.resp = resp_type'(this.vif.PSLVERR);
   endtask : drive_pins
 

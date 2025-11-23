@@ -30,6 +30,7 @@ class cl_apb_tb_base_test extends uvm_test;
   endtask : reset_phase
 
   task main_phase(uvm_phase phase);
+    super.main_phase(phase);
     seq = cl_apb_tb_base_vseq::type_id::create("seq",this);
     phase.raise_objection(this);
     seq.start(environment.sequencer);
