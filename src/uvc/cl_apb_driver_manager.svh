@@ -34,11 +34,18 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
     this.vif.PADDR <= this.req.addr;
     @(posedge this.vif.PCLK);
     this.vif.PENABLE <= 1'b1;
+    if (this.req.op == pk_apb::WR) begin
+      this.vif.PWDATA <= this.req.data;
+    end
+    while (this.vif.PREADY !== 1'b1) begin
+      @(posedge this.vif.PCLK);
+    end
+    //@(posedge this.vif.PCLK);
     this.rsp.resp = resp_type'(this.vif.PSLVERR);
-    //do begin
-    //  @(posedge this.vif.PCLK);
-    //end while (this.vif.PREADY === 1'b0);
-    @(posedge this.vif.PCLK);
+    if (this.req.op == pk_apb::RD) begin
+      this.rsp.data = this.vif.PRDATA;
+    end
+    this.drive_reset();
   endtask : drive_pins
 
 endclass : cl_apb_driver_manager

@@ -8,6 +8,7 @@ package pk_apb;
   `include "cl_apb_config.svh"
   `include "cl_apb_driver_base.svh"
   `include "cl_apb_driver_manager.svh"
+  `include "cl_apb_driver_subordinate.svh"
   `include "cl_apb_agent.svh"
 
 endpackage : pk_apb

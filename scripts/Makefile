@@ -32,12 +32,12 @@ clean:
 	rm -rf verilator_build_dir
 
 verilator_build_dir:
-		$(VERILATOR) --binary $(UVM_FILES) -f verilator.f $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) --bbox-unsup  \
+		$(VERILATOR) --binary $(UVM_FILES) -f verilator.f $(DEFINES) $(WARNINGS) $(OTHER_FLAGS) --trace --bbox-unsup  \
 		--verilate-jobs $(VERILATOR_JOBS) --build-jobs $(VERILATOR_JOBS) -Mdir $(BUILD_DIR) --top-module tb_top src/tb/tb_top.sv \
 		$(RTL_FILES) -CFLAGS -O0
 
 run-test: verilator_build_dir
-	./verilator_build_dir/Vtb_top +UVM_TESTNAME=$(UVM_TEST) +verilator+seed+$(SEED)
+	./verilator_build_dir/Vtb_top +UVM_TESTNAME=$(UVM_TEST) +verilator+seed+$(SEED) $(EXTRA_ARGS)
 
 simulate: $(SIM_DIR)/$(BIN_NAME)
 	$(SIM_DIR)/$(BIN_NAME) +UVM_TESTNAME=$(UVM_TEST) | tee $(TEMPFILE)

@@ -31,8 +31,8 @@ class cl_apb_agent extends uvm_agent;
         end
       uvm_config_db#(cl_apb_config)::set(this, "monitor", "cfg", this.cfg);
       this.sequencer = uvm_sequencer#(cl_apb_seq_item)::type_id::create("sequencer",this);
-      this.monitor = cl_apb_monitor::type_id::create("monitor", this);
     end
+    this.monitor = cl_apb_monitor::type_id::create("monitor", this);
 
 
   endfunction : build_phase
