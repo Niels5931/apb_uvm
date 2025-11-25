@@ -1,7 +1,7 @@
 class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item, cl_apb_seq_item);
 
-  virtual if_apb vif;
   process main_loop_h;
+  cl_apb_config cfg;
 
   `uvm_component_utils(cl_apb_driver_base)
 
