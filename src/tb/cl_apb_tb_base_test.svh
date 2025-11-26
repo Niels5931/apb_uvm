@@ -23,7 +23,7 @@ class cl_apb_tb_base_test extends uvm_test;
   task reset_phase(uvm_phase phase);
     super.reset_phase(phase);
     this.cfg.clk_if.PRESETn <= 1'b0;
-    repeat ($urandom_range(1,100)) @(posedge this.cfg.clk_if.PCLK);
+    repeat ($urandom_range(10,100)) @(posedge this.cfg.clk_if.PCLK);
     this.cfg.clk_if.PRESETn <= 1'b1;
     `uvm_info("cl_apb_tb_base_test","Release reset",UVM_MEDIUM)
   endtask : reset_phase
