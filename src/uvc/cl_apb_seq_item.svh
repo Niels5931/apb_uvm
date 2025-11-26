@@ -20,7 +20,7 @@ class cl_apb_seq_item extends uvm_sequence_item;
   endfunction
 
   constraint seq_item_delay_c {
-    this.delay <= 10;
+    this.delay == 0;
   };
 
 endclass : cl_apb_seq_item

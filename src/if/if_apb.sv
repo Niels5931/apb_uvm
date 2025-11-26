@@ -5,7 +5,7 @@ interface if_apb(
 
   logic PSEL;
   logic PENABLE;
-  logic PADDR;
+  logic [31:0] PADDR;
   logic PREADY;
   logic PSLVERR;
   logic PWRITE;

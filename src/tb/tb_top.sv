@@ -1,3 +1,4 @@
+`timescale 1ns/1ns
 module tb_top;
 
   import uvm_pkg::*;
@@ -8,8 +9,9 @@ module tb_top;
 
   always #5 PCLK = ~PCLK;
 
-  if_clk clk_if(.PCLK(PCLK),.PRESETn(PRESETn));
+  if_clk clk_if(.PCLK(PCLK));
   if_apb apb_if(.PCLK(clk_if.PCLK),.PRESETn(clk_if.PRESETn));
+
 
   initial begin
     uvm_config_db#(virtual if_clk)::set(uvm_root::get(),"","clk_if",clk_if);
@@ -19,5 +21,10 @@ module tb_top;
 
   initial begin
     run_test();
+  end
+
+  initial begin
+    $dumpfile("trace.vcd");
+    $dumpvars(0, tb_top);
   end
 endmodule

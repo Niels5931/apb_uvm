@@ -21,7 +21,6 @@ class cl_apb_tb_base_test extends uvm_test;
   endfunction : build_phase
 
   task reset_phase(uvm_phase phase);
-//    `uvm_fatal("DINFAR","Failing in bu base_test")
     super.reset_phase(phase);
     this.cfg.clk_if.PRESETn <= 1'b0;
     repeat ($urandom_range(1,100)) @(posedge this.cfg.clk_if.PCLK);
