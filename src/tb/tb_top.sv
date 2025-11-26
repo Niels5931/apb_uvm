@@ -12,9 +12,6 @@ module tb_top;
   if_clk clk_if(.PCLK(PCLK));
   if_apb apb_if(.PCLK(clk_if.PCLK),.PRESETn(clk_if.PRESETn));
 
-  apb_stub dut (
-    .if_apb(apb_if)
-  );
 
   initial begin
     uvm_config_db#(virtual if_clk)::set(uvm_root::get(),"","clk_if",clk_if);

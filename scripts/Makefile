@@ -4,7 +4,7 @@ BUILD_DIR = verilator_build_dir
 VERILATOR := verilator
 VERILATOR_JOBS ?= 4
 
-UVM_ROOT = /home/niels/uvm/uvm-verilator-uvm-2017-1.0/
+UVM_ROOT = /home/niels/projects/uvm/common/uvm-2017-install/uvm-verilator-2017-1.0/
 
 SRC_DIR = src
 UVC_DIR = $(SRC_DIR)/uvc

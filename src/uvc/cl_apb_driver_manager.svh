@@ -8,42 +8,39 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if (!uvm_config_db#(virtual if_apb.master)::get(this,"","vif",this.vif)) begin
-      `uvm_fatal("Driver Manager", "Error! Could not retrieve APB master interface")
-    end
   endfunction : build_phase
 
   virtual function void drive_reset();
-    this.vif.PSEL <= '0;
-    this.vif.PENABLE <= '0;
-    this.vif.PADDR <= '0;
-    this.vif.PWRITE <= '0;
-    this.vif.PWDATA <= '0;
-    this.vif.PSTRB <= '0;
-    this.vif.PPROT <= '0;
+    this.cfg.vif.PSEL <= '0;
+    this.cfg.vif.PENABLE <= '0;
+    this.cfg.vif.PADDR <= '0;
+    this.cfg.vif.PWRITE <= '0;
+    this.cfg.vif.PWDATA <= '0;
+    this.cfg.vif.PSTRB <= '0;
+    this.cfg.vif.PPROT <= '0;
   endfunction : drive_reset
 
   virtual task drive_pins();
     // RD/WR
     if (this.req.op === pk_apb::WR) begin
-      this.vif.PWRITE <= 1'b1;
+      this.cfg.vif.PWRITE <= 1'b1;
     end else if (this.req.op == pk_apb::RD) begin
-      this.vif.PWRITE <= 1'b0;
+      this.cfg.vif.PWRITE <= 1'b0;
     end
-    this.vif.PSEL <= 1'b1;
-    this.vif.PADDR <= this.req.addr;
-    @(posedge this.vif.PCLK);
-    this.vif.PENABLE <= 1'b1;
+    this.cfg.vif.PSEL <= 1'b1;
+    this.cfg.vif.PADDR <= this.req.addr;
+    @(posedge this.cfg.vif.PCLK);
+    this.cfg.vif.PENABLE <= 1'b1;
     if (this.req.op == pk_apb::WR) begin
-      this.vif.PWDATA <= this.req.data;
+      this.cfg.vif.PWDATA <= this.req.data;
     end
-    while (this.vif.PREADY !== 1'b1) begin
-      @(posedge this.vif.PCLK);
+    while (this.cfg.vif.PREADY !== 1'b1) begin
+      @(posedge this.cfg.vif.PCLK);
     end
-    //@(posedge this.vif.PCLK);
-    this.rsp.resp = resp_type'(this.vif.PSLVERR);
+    //@(posedge this.cfg.vif.PCLK);
+    this.rsp.resp = resp_type'(this.cfg.vif.PSLVERR);
     if (this.req.op == pk_apb::RD) begin
-      this.rsp.data = this.vif.PRDATA;
+      this.rsp.data = this.cfg.vif.PRDATA;
     end
     this.drive_reset();
   endtask : drive_pins

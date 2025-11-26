@@ -8,35 +8,32 @@ class cl_apb_driver_subordinate extends cl_apb_driver_base;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if (!uvm_config_db#(virtual if_apb.slave)::get(this,"","vif",this.vif)) begin
-      `uvm_fatal("Driver Slave", "Error! Could not retrieve APB master interface")
-    end
   endfunction : build_phase
 
   virtual function void drive_reset();
-    this.vif.PREADY <= 'bx;
-    this.vif.PRDATA <= 'bx;
-    this.vif.PSLVERR <= 'bx;
+    this.cfg.vif.PREADY <= 'bx;
+    this.cfg.vif.PRDATA <= 'bx;
+    this.cfg.vif.PSLVERR <= 'bx;
   endfunction : drive_reset
 
   virtual task drive_pins();
     // wait until PSEL is high
     do begin
-      @(posedge this.vif.PCLK);
-    end while (this.vif.PSEL !== 1'b1);
-    while (this.vif.PENABLE !== 1'b1) begin
-      @(posedge this.vif.PCLK);
+      @(posedge this.cfg.vif.PCLK);
+    end while (this.cfg.vif.PSEL !== 1'b1);
+    while (this.cfg.vif.PENABLE !== 1'b1) begin
+      @(posedge this.cfg.vif.PCLK);
     end
-    repeat(this.req.delay) @(posedge this.vif.PCLK);
+    repeat(this.req.delay) @(posedge this.cfg.vif.PCLK);
 
-    this.vif.PREADY <= 1'b1;
-    this.vif.PSLVERR <= this.req.resp;
+    this.cfg.vif.PREADY <= 1'b1;
+    this.cfg.vif.PSLVERR <= this.req.resp;
 
     if (this.req.op === pk_apb::RD) begin
-      this.vif.PRDATA <= this.req.data;
+      this.cfg.vif.PRDATA <= this.req.data;
     end
 
-    @(posedge this.vif.PCLK);
+    @(posedge this.cfg.vif.PCLK);
 
     this.drive_reset();
 
