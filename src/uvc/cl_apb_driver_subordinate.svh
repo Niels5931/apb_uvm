@@ -21,9 +21,7 @@ class cl_apb_driver_subordinate extends cl_apb_driver_base;
     do begin
       @(posedge this.cfg.vif.PCLK);
     end while (this.cfg.vif.PSEL !== 1'b1);
-    while (this.cfg.vif.PENABLE !== 1'b1) begin
-      @(posedge this.cfg.vif.PCLK);
-    end
+
     repeat(this.req.delay) @(posedge this.cfg.vif.PCLK);
 
     this.cfg.vif.PREADY <= 1'b1;
@@ -33,7 +31,9 @@ class cl_apb_driver_subordinate extends cl_apb_driver_base;
       this.cfg.vif.PRDATA <= this.req.data;
     end
 
-    @(posedge this.cfg.vif.PCLK);
+    do begin
+      @(posedge this.cfg.vif.PCLK);
+    end while (this.cfg.vif.PENABLE !== 1'b1);
 
     this.drive_reset();
 

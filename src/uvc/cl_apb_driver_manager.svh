@@ -21,24 +21,31 @@ class cl_apb_driver_manager extends cl_apb_driver_base;
   endfunction : drive_reset
 
   virtual task drive_pins();
+    this.clk_trigger.wait_ptrigger();
     // RD/WR
     if (this.req.op === pk_apb::WR) begin
       this.cfg.vif.PWRITE <= 1'b1;
     end else if (this.req.op == pk_apb::RD) begin
       this.cfg.vif.PWRITE <= 1'b0;
     end
+
     this.cfg.vif.PSEL <= 1'b1;
     this.cfg.vif.PADDR <= this.req.addr;
+
     @(posedge this.cfg.vif.PCLK);
+
     this.cfg.vif.PENABLE <= 1'b1;
+
     if (this.req.op == pk_apb::WR) begin
       this.cfg.vif.PWDATA <= this.req.data;
     end
+
     do begin
       @(posedge this.cfg.vif.PCLK);
     end while (this.cfg.vif.PREADY !== 1'b1);
-    //@(posedge this.cfg.vif.PCLK);
+
     this.rsp.resp = resp_type'(this.cfg.vif.PSLVERR);
+
     if (this.req.op == pk_apb::RD) begin
       this.rsp.data = this.cfg.vif.PRDATA;
     end

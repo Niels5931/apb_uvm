@@ -2,6 +2,7 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item, cl_apb_seq_item);
 
   process main_loop_h;
   cl_apb_config cfg;
+  uvm_event clk_trigger;
 
   `uvm_component_utils(cl_apb_driver_base)
 
@@ -11,12 +12,20 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item, cl_apb_seq_item);
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
+    this.clk_trigger = new("clk_trigger");
     if(!uvm_config_db#(cl_apb_config)::get(this,"","cfg",this.cfg)) begin
       `uvm_fatal("APB Driver Base", "Could not find config object")
     end
   endfunction : build_phase
 
   virtual task main_phase(uvm_phase phase);
+    fork
+      forever begin
+        @(posedge this.cfg.vif.PCLK);
+        this.clk_trigger.trigger();
+      end
+    join_none
+
     fork
       handle_reset();
       start_loop();
@@ -44,7 +53,9 @@ class cl_apb_driver_base extends uvm_driver#(cl_apb_seq_item, cl_apb_seq_item);
     while(this.cfg.vif.PRESETn !== 1) begin
       @(posedge this.cfg.vif.PCLK);
     end
-    main_loop();
+    fork
+      main_loop();
+    join
   endtask : start_loop
 
   task main_loop;
